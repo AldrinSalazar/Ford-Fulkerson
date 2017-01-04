@@ -3,7 +3,7 @@ package web.ve.alphasigma.modelo;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Modelo {
+public class Modelo {//TODO:Documentacion
 
     private List<Vertice> vertices;
     private List<Arista> aristas;

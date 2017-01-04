@@ -5,7 +5,7 @@ import web.ve.alphasigma.modelo.Vertice;
 
 import static org.junit.Assert.*;
 
-public class VerticeTest {
+public class VerticeTest {//TODO: Documentacion
 
     @Test
     public void instanciaYValores(){

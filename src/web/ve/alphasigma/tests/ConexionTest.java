@@ -5,7 +5,7 @@ import web.ve.alphasigma.modelo.Conexion;
 import web.ve.alphasigma.modelo.Vertice;
 import static org.junit.Assert.*;
 
-public class ConexionTest {
+public class ConexionTest {//TODO: Documentacion
 
     @Test
     public void invertir() throws Exception {

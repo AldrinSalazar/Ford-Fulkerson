@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class GUI {
+public class GUI {//TODO: Documentacion, Acoplar al modelo
     private static final int ancho = 800;
     private static final int alto = 400;
 

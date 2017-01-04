@@ -6,7 +6,7 @@ import web.ve.alphasigma.modelo.Vertice;
 
 import static org.junit.Assert.*;
 
-public class AristaTest {
+public class AristaTest {//TODO: Documentacion
 
     Vertice a;
     Vertice b;

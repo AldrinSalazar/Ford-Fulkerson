@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import web.ve.alphasigma.modelo.Identificable;
 
-public class IdentificableTest {
+public class IdentificableTest {//TODO: Documentacion
     Identificable i;
 
     public IdentificableTest() {
