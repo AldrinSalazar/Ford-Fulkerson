@@ -115,7 +115,7 @@ public class ModeloTest {
         Vertice a = new Vertice();
         Vertice b = new Vertice();
         modelo.añadirVertice(a, b);
-        assertFalse(modelo.existeCamino(a, b));
+        assertNull(modelo.existeCamino(a, b));
     }
 
     @Test
@@ -128,8 +128,8 @@ public class ModeloTest {
         modelo.añadirVertice(a, b, c);
         modelo.añadirArista(ab);
 
-        assertTrue(modelo.existeCamino(a, b));
-        assertFalse(modelo.existeCamino(a, c));
+        assertNotNull(modelo.existeCamino(a, b));
+        assertNull(modelo.existeCamino(a, c));
     }
 
     @Test
@@ -155,13 +155,13 @@ public class ModeloTest {
         modelo.añadirVertice(a, b, c, d, e, f, z);
         modelo.añadirArista(ab, bd, de, ef, fc, ca, cb, ce, cz);
 
-        assertTrue(modelo.existeCamino(a, e));
-        assertTrue(modelo.existeCamino(a, b));
-        assertTrue(modelo.existeCamino(c, f));
-        assertTrue(modelo.existeCamino(a, c));
-        assertTrue(modelo.existeCamino(c, z));
-        assertFalse(modelo.existeCamino(z, c));
-        assertFalse(modelo.existeCamino(z, a));
+        assertNotNull(modelo.existeCamino(a, e));
+        assertNotNull(modelo.existeCamino(a, b));
+        assertNotNull(modelo.existeCamino(c, f));
+        assertNotNull(modelo.existeCamino(a, c));
+        assertNotNull(modelo.existeCamino(c, z));
+        assertNull(modelo.existeCamino(z, c));
+        assertNull(modelo.existeCamino(z, a));
     }
 
     @Test
@@ -202,5 +202,78 @@ public class ModeloTest {
 
         assertTrue(modelo.redEsValida());
     }
+
+    @Test
+    public void caminoEntreVertices1(){
+        int v1 = 1996;
+        int v2 = 2078;
+        int v3 = 1313;
+
+        Vertice a = new Vertice();
+        Vertice b = new Vertice();
+        Vertice c = new Vertice();
+        Vertice d = new Vertice();
+        Vertice e = new Vertice();
+        Vertice f = new Vertice();
+        Vertice z = new Vertice();
+
+        Arista ab = new Arista(a, b);
+        Arista bd = new Arista(b, d);
+        Arista de = new Arista(d, e);
+        de.setValor(v3);
+        Arista ef = new Arista(e, f);
+        Arista fc = new Arista(f, c);
+        fc.setValor(v1);
+        Arista ca = new Arista(c, a);
+        ca.setValor(v2);
+        Arista cb = new Arista(c, b);
+        Arista ce = new Arista(c, e);
+        Arista cz = new Arista(c, z);
+
+        modelo.añadirVertice(a, b, c, d, e, f, z);
+        modelo.añadirArista(ab, bd, de, ef, fc, ca, cb, ce, cz);
+
+        List<Vertice> camino = modelo.existeCamino(f, a);
+        List<Arista> caminoAristas = modelo.caminoEntreVertices(camino);
+
+        assertTrue(caminoAristas.contains(fc));
+        assertTrue(caminoAristas.contains(ca));
+        assertFalse(caminoAristas.contains(cz));
+        assertFalse(caminoAristas.contains(cb));
+        assertEquals(2, caminoAristas.size());
+        assertEquals((Integer)v1, caminoAristas.get(0).getValor());
+        assertEquals((Integer)v2, caminoAristas.get(1).getValor());
+
+        camino = modelo.existeCamino(d, e);
+        caminoAristas = modelo.caminoEntreVertices(camino);
+
+        assertTrue(caminoAristas.contains(de));
+        assertEquals(1, caminoAristas.size());
+        assertEquals((Integer)v3, caminoAristas.get(0).getValor());
+    }
+
+    @Test
+    public void algoritmoFordFulkerson1(){
+        Vertice a = new Vertice(Vertice.Tipo.FUENTE);
+        Vertice b = new Vertice();
+        Vertice c = new Vertice();
+        Vertice d = new Vertice();
+        Vertice e = new Vertice();
+        Vertice f = new Vertice(Vertice.Tipo.SUMIDERO);
+
+        Arista ab = new Arista(a, b, 13);
+        Arista bc = new Arista(b, c, 5);
+        Arista cf = new Arista(c, f, 3);
+        Arista ad = new Arista(a, d, 10);
+        Arista de = new Arista(d, e, 35);
+        Arista ef = new Arista(e, f, 20);
+        Arista cd = new Arista(c, d, 50);
+
+        modelo.añadirVertice(a, b, c, d, e, f);
+        modelo.añadirArista(ab, bc, cf, ad, de, ef, cd);
+
+        assertEquals(15, modelo.algoritmoFordFulkerson());
+    }
+
 
 }

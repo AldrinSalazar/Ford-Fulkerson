@@ -39,7 +39,6 @@ public class Modelo {
         return aristas;
     }
 
-    //TODO:Implementar
     public int algoritmoFordFulkerson() throws IllegalStateException{
         if(!redEsValida())
             throw new IllegalStateException("Red invalida");
@@ -49,8 +48,10 @@ public class Modelo {
         Vertice sumidero = encontrarSumidero();
         setAristasFlujoCero();
 
-        while (existeCamino(origen, sumidero)){
-            List<Arista> camino = caminoEntreVertices(origen, sumidero);
+        List<Vertice> caminoVertice;
+
+        while ((caminoVertice = existeCamino(origen, sumidero)) != null){
+            List<Arista> camino = caminoEntreVertices(caminoVertice);
             int flujoMenor = camino.stream().mapToInt(Arista::getFlujoRestante).min().getAsInt();
 
             camino.forEach((Arista e) -> e.setFlujo(e.getFlujo() + flujoMenor));
@@ -68,14 +69,26 @@ public class Modelo {
         aristas.forEach((Arista e) -> e.setFlujo(0));
     }
 
-    //TODO:Implementar
-    private List<Arista> caminoEntreVertices(Vertice a, Vertice b){
-        List<Arista> camino = new ArrayList<>();
+    public List<Arista> caminoEntreVertices(List<Vertice> camino){
+        ArrayList<Arista> resultado = new ArrayList<>();
 
-        return camino;
+        for(int i = 0; i<camino.size()-1; i++){
+            final int j = i;
+            Optional<Arista> tmp = aristas.stream()
+                                    .filter((Arista e) -> e.getInicio() == camino.get(j))
+                                    .filter((Arista e) -> e.getFin() == camino.get(j+1))
+                                    .findFirst();
+
+            resultado.add(tmp.get());
+        }
+
+        return resultado;
     }
 
-    public boolean existeCamino(Vertice origen, Vertice destino){
+    public List<Vertice> existeCamino(Vertice origen, Vertice destino){
+        /**
+         * Implementacion del algoritmo Depth-first para recorrida de un grafo
+         */
         ArrayList<Vertice> visitados = new ArrayList<>();
         Stack<Vertice> control = new Stack<>();
 
@@ -97,11 +110,14 @@ public class Modelo {
                 actual = control.pop();
             }
 
-            if(actual.equals(destino)) return true;
+            if(actual.equals(destino)){
+                control.add(actual);
+                return new ArrayList<>(control);
+            }
 
         }while (!actual.equals(destino));
 
-        return false;
+        return null;
     }
 
     public List<Vertice> adyacentes(Vertice v){
@@ -123,7 +139,7 @@ public class Modelo {
         if(o == null || s == null)
             return false;
 
-        return existeCamino(o, s);
+        return existeCamino(o, s) != null;
     }
 
     public Vertice encontrarFuente(){

@@ -15,9 +15,7 @@ public class Identificable {
     }
 
     public Identificable() {
-        this.id = UUID.randomUUID();
-        this.nombre = null;
-        this.valor = null;
+        this(null, null);
     }
 
     public UUID getId() {
