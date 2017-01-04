@@ -275,5 +275,28 @@ public class ModeloTest {
         assertEquals(15, modelo.algoritmoFordFulkerson());
     }
 
+    @Test
+    public void algoritmoFordFulkerson2(){
+        Vertice s = new Vertice(Vertice.Tipo.FUENTE);
+        Vertice o = new Vertice();
+        Vertice p = new Vertice();
+        Vertice q = new Vertice();
+        Vertice r = new Vertice();
+        Vertice t = new Vertice(Vertice.Tipo.SUMIDERO);
+
+        Arista so = new Arista(s, o, 3);
+        Arista sp = new Arista(s, p, 3);
+        Arista op = new Arista(o, p, 2);
+        Arista oq = new Arista(o, q, 3);
+        Arista pr = new Arista(p, r, 2);
+        Arista rt = new Arista(r, t, 3);
+        Arista qr = new Arista(q, r, 4);
+        Arista qt = new Arista(q, t, 2);
+
+        modelo.añadirVertice(s, o, p, q, r, t);
+        modelo.añadirArista(so, sp, op, oq, pr, rt, qr, qt);
+
+        assertEquals(5, modelo.algoritmoFordFulkerson());
+    }
 
 }
