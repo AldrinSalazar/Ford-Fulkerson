@@ -31,10 +31,18 @@ public class Arista extends Conexion{
     }
 
     public void setFlujo(int flujo) throws IllegalArgumentException{
-        if(flujo > this.capacidad)
+        if(flujo > this.capacidad) {
             throw new IllegalArgumentException("Flujo mayor a capacidad");
-        else
+        } else if(flujo == capacidad){
+            this.flujo = 0;
+            invertir();
+        }else {
             this.flujo = flujo;
+        }
+    }
+
+    public int getFlujoRestante(){
+        return this.capacidad - this.flujo;
     }
 
 }

@@ -37,4 +37,9 @@ public class AristaTest {
         test.setFlujo(11);
     }
 
+    @Test
+    public void invertirTest(){
+        Arista test = new Arista(a, b, 10, 10);
+    }
+
 }

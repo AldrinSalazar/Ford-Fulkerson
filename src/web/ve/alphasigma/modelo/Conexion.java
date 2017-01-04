@@ -25,4 +25,11 @@ public class Conexion extends Identificable{
     public void setFin(Vertice fin) {
         this.fin = fin;
     }
+
+    //TODO:Protected
+    public void invertir(){
+        Vertice tmp = this.inicio;
+        this.inicio = this.fin;
+        this.fin = tmp;
+    }
 }
