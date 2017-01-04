@@ -4,6 +4,10 @@ public class Arista extends Conexion{
     private int capacidad;
     private int flujo;
 
+    public Arista(Vertice inicio, Vertice fin){
+        this(inicio, fin, 0, 0);
+    }
+
     public Arista(Vertice inicio, Vertice fin, int capacidad, int flujo) throws IllegalArgumentException{
         super(inicio, fin);
 

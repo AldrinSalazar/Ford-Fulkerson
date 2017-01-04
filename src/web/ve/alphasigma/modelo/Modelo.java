@@ -1,7 +1,7 @@
 package web.ve.alphasigma.modelo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Modelo {
 
@@ -15,8 +15,12 @@ public class Modelo {
         corriendo = false;
     }
 
-    public void añadirVertice(Vertice v){
-        vertices.add(v);
+    public void añadirVertice(Vertice... v){
+        vertices.addAll(Arrays.asList(v));
+    }
+
+    public void añadirArista(Arista... e){
+        Arrays.asList(e).forEach(this::añadirArista);
     }
 
     public void añadirArista(Arista e) throws IllegalArgumentException{
@@ -27,12 +31,21 @@ public class Modelo {
         }
     }
 
+    public List<Vertice> getVertices() {
+        return vertices;
+    }
+
+    public List<Arista> getAristas() {
+        return aristas;
+    }
+
+    //TODO:Implementar
     public int algoritmoFordFulkerson() throws IllegalStateException{
         if(!redEsValida())
             throw new IllegalStateException("Red invalida");
 
         int flujoMaximo = 0;
-        Vertice origen = encontrarOrigen();
+        Vertice origen = encontrarFuente();
         Vertice sumidero = encontrarSumidero();
         setAristasFlujoCero();
 
@@ -51,7 +64,7 @@ public class Modelo {
         return vertices.contains(e.getInicio()) && vertices.contains(e.getFin());
     }
 
-    private void setAristasFlujoCero(){
+    public void setAristasFlujoCero(){
         aristas.forEach((Arista e) -> e.setFlujo(0));
     }
 
@@ -62,9 +75,40 @@ public class Modelo {
         return camino;
     }
 
-    //TODO:Implementar
-    private boolean existeCamino(Vertice a, Vertice b){
-        return true;
+    public boolean existeCamino(Vertice origen, Vertice destino){
+        ArrayList<Vertice> visitados = new ArrayList<>();
+        Stack<Vertice> control = new Stack<>();
+
+        Vertice actual = origen;
+
+        do {
+            visitados.add(actual);
+            control.add(actual);
+
+            Optional<Vertice> siguiente = adyacentes(actual).stream()
+                                                    .filter((Vertice e) -> !visitados.contains(e))
+                                                    .findFirst();
+
+            if(siguiente.isPresent()){
+                actual = siguiente.get();
+            }else {
+                control.pop();
+                if(control.empty()) break;
+                actual = control.pop();
+            }
+
+            if(actual.equals(destino)) return true;
+
+        }while (!actual.equals(destino));
+
+        return false;
+    }
+
+    public List<Vertice> adyacentes(Vertice v){
+        return aristas.stream()
+                .filter((Arista e) -> e.getInicio() == v)
+                .map(Arista::getFin)
+                .collect(Collectors.toList());
     }
 
     private void limpiarGrafoPrincipal(){
@@ -72,19 +116,30 @@ public class Modelo {
         aristas = new ArrayList<>();
     }
 
-    //TODO:Implementar
-    private boolean redEsValida(){
-        return true;
+    public boolean redEsValida(){
+        Vertice o = encontrarFuente();
+        Vertice s = encontrarSumidero();
+
+        if(o == null || s == null)
+            return false;
+
+        return existeCamino(o, s);
     }
 
-    //TODO:Implementar
-    private Vertice encontrarOrigen(){
-        return null;
+    public Vertice encontrarFuente(){
+        Optional<Vertice> tmp = vertices.stream()
+                .filter((Vertice e) -> e.getTipo() == Vertice.Tipo.FUENTE)
+                .findFirst();
+
+        return tmp.isPresent() ? tmp.get() : null;
     }
 
-    //TODO:Implementar
-    private Vertice encontrarSumidero(){
-        return null;
+    public Vertice encontrarSumidero(){
+        Optional<Vertice> tmp = vertices.stream()
+                .filter((Vertice e) -> e.getTipo() == Vertice.Tipo.SUMIDERO)
+                .findFirst();
+
+        return tmp.isPresent() ? tmp.get() : null;
     }
 
 }
