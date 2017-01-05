@@ -1,5 +1,9 @@
 package web.ve.alphasigma;
 
+import web.ve.alphasigma.controlador.Controlador;
+import web.ve.alphasigma.controlador.VerticeObservable;
+import web.ve.alphasigma.vista.PanelGrafos;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +15,7 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     private static final String titulo = "Algoritmo de Ford-Fulkerson";
     private static final String titulo_btn_nuevo_vertice = "Nuevo vertice";
     private static final String titulo_btn_nuevo_arista = "Nueva arista";
+
     private static final String titulo_btn_borrar = "Borrar";
     private static final String titulo_btn_editar = "Editar";
     private static final String titulo_btn_iniciar = "Resolver";
@@ -19,7 +24,7 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
 
     private JFrame marco_ventana;
 
-    private JPanel panel_canvas;
+    private PanelGrafos panel_canvas;
     private JPanel panel_botones;
 
     private JButton btn_nuevo_vertice;
@@ -30,9 +35,9 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     private JButton btn_siguiente;
     private JButton btn_anterior;
 
+    private Controlador controlador;
 
-
-    public GUI() {
+    public GUI(Controlador controlador) {
         Utils.LogI("Iniciar Ventana");
         iniciarVentana();
 
@@ -43,11 +48,12 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
         acoplarElementos();
 
         marco_ventana.setVisible(true);
+        this.controlador = controlador;
     }
 
     private void acoplarElementos(){
         panel_botones = new JPanel(new GridLayout(1, 4));
-        panel_canvas = new JPanel();
+        panel_canvas = new PanelGrafos();
 
         panel_botones.add(btn_nuevo_vertice);
         panel_botones.add(btn_nuevo_arista);
@@ -121,6 +127,8 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     // - // - // - // - // - // - // - // - // - //
 
     private void clickBotonNuevoVertice(){
+        VerticeObservable v = controlador.nuevoVertice();
+        panel_canvas.añadirDibujable(v);
     }
 
     private void clickBotonNuevoArista(){

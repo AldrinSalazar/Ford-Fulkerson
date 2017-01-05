@@ -1,0 +1,153 @@
+/*
+ * Copyright (C) 2017  Aldrin Salazar
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
+package web.ve.alphasigma.vista;
+
+import web.ve.alphasigma.modelo.Vertice;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PanelGrafos extends JPanel
+        implements MouseMotionListener, MouseListener, KeyListener{
+    private enum Estado{
+        NUEVO_VERTICE,
+        NADA,
+        SELECCION
+    }
+
+    private List<Dibujable> elementos;
+    private Estado estado;
+
+    private Dibujable tmp;
+    private List<Dibujable> seleccion;
+
+    public PanelGrafos() {
+        elementos = new ArrayList<>();
+        estado = Estado.NADA;
+        setBackground(Color.GRAY);
+        setFocusable(true);
+        addMouseMotionListener(this);
+        addMouseListener(this);
+        addKeyListener(this);
+    }
+
+    public void setEstado(Estado e){
+        this.estado = e;
+    }
+
+    public void añadirDibujable(Dibujable d){
+        elementos.add(d);
+        tmp = d;
+        estado = Estado.NUEVO_VERTICE;
+        setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+    }
+
+    public void quitarDibujable(Dibujable d){
+        elementos.remove(d);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        elementos.forEach((Dibujable d) -> d.dibujar(g));
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if(estado == Estado.NUEVO_VERTICE){
+            tmp.setPosicion(e.getPoint());
+            repaint();
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(estado == Estado.NUEVO_VERTICE){
+            tmp.setPosicion(e.getPoint());
+            Vertice.Tipo tipo = (Vertice.Tipo) JOptionPane.showInputDialog(null, "Tipo de Vertice:",
+                                                    "Seleccionar tipo de Vertice",
+                                                    JOptionPane.PLAIN_MESSAGE,
+                                                    null,
+                                                    Vertice.Tipo.values(),
+                                                    Vertice.Tipo.values()[2]);
+            ((Vertice)tmp).setTipo(tipo);
+            tmp = null;
+            repaint();
+        }else if(estado == Estado.SELECCION){
+            //Seleccionar mas cercano
+
+            elementos.stream().sorted();
+
+
+
+            return;
+        }
+
+        estado = Estado.NADA;
+        setCursor(Cursor.getDefaultCursor());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("Keyevent press");
+        if(estado == Estado.NADA && e.getKeyCode() == KeyEvent.VK_S){
+            estado = Estado.SELECCION;
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }else if(estado == Estado.SELECCION && e.getKeyCode() == KeyEvent.VK_S){
+            estado = Estado.NADA;
+            setCursor(Cursor.getDefaultCursor());
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+}
