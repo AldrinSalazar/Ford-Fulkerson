@@ -26,7 +26,7 @@ import java.awt.*;
 import java.util.Observable;
 
 public class VerticeObservable extends Vertice implements Dibujable{
-    private final static int DIAMETRO_DIBUJO = 40;
+    public final static int DIAMETRO_DIBUJO = 40;
     private final static int RADIO_DIBUJO = DIAMETRO_DIBUJO / 2;
     private final static Color COLOR = Color.ORANGE;
     private final static Color COLOR_SEL = Color.CYAN;
@@ -54,10 +54,6 @@ public class VerticeObservable extends Vertice implements Dibujable{
         return observable;
     }
 
-    public void seleccionar(){
-        seleccionado = !seleccionado;
-    }
-
     @Override
     public void dibujar(Graphics g) {
         g.setColor(seleccionado ? COLOR_SEL : COLOR);
@@ -83,5 +79,15 @@ public class VerticeObservable extends Vertice implements Dibujable{
     @Override
     public Point getPosicion() {
         return this.posicion;
+    }
+
+    @Override
+    public boolean estaSeleccionado() {
+        return seleccionado;
+    }
+
+    @Override
+    public void seleccionar(){
+        seleccionado = !seleccionado;
     }
 }

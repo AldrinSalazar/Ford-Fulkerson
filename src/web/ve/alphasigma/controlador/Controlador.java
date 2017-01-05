@@ -20,6 +20,11 @@ package web.ve.alphasigma.controlador;
 
 import web.ve.alphasigma.GUI;
 import web.ve.alphasigma.modelo.Modelo;
+import web.ve.alphasigma.modelo.Vertice;
+import web.ve.alphasigma.vista.Dibujable;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Controlador {
     private Modelo modelo;
@@ -36,5 +41,17 @@ public class Controlador {
         return v;
     }
 
+    public AristaObservable nuevaArista(){
+        List<Dibujable> seleccion = vista.panel_canvas.seleccion.stream()
+                                            .filter((Dibujable d) -> d instanceof Vertice)
+                                            .collect(Collectors.toList());
 
+        vista.panel_canvas.seleccion.forEach(Dibujable::seleccionar);
+        vista.panel_canvas.seleccion.clear();
+
+        //TODO:Validar seleccion vacia
+        AristaObservable v = new AristaObservable((Vertice)seleccion.get(0), (Vertice)seleccion.get(1));
+        modelo.añadirArista(v);
+        return v;
+    }
 }

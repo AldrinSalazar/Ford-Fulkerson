@@ -17,6 +17,8 @@
 
 package web.ve.alphasigma.vista;
 
+import web.ve.alphasigma.Utils;
+import web.ve.alphasigma.controlador.VerticeObservable;
 import web.ve.alphasigma.modelo.Vertice;
 
 import javax.swing.*;
@@ -37,10 +39,11 @@ public class PanelGrafos extends JPanel
     private Estado estado;
 
     private Dibujable tmp;
-    private List<Dibujable> seleccion;
+    public List<Dibujable> seleccion;
 
     public PanelGrafos() {
         elementos = new ArrayList<>();
+        seleccion = new ArrayList<>();
         estado = Estado.NADA;
         setBackground(Color.GRAY);
         setFocusable(true);
@@ -55,9 +58,14 @@ public class PanelGrafos extends JPanel
 
     public void añadirDibujable(Dibujable d){
         elementos.add(d);
-        tmp = d;
-        estado = Estado.NUEVO_VERTICE;
-        setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+
+        if(d instanceof Vertice) {
+            tmp = d;
+            estado = Estado.NUEVO_VERTICE;
+            setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+        }
+
+        repaint();
     }
 
     public void quitarDibujable(Dibujable d){
@@ -81,28 +89,48 @@ public class PanelGrafos extends JPanel
     @Override
     public void mouseClicked(MouseEvent e) {
         if(estado == Estado.NUEVO_VERTICE){
-            tmp.setPosicion(e.getPoint());
-            Vertice.Tipo tipo = (Vertice.Tipo) JOptionPane.showInputDialog(null, "Tipo de Vertice:",
-                                                    "Seleccionar tipo de Vertice",
-                                                    JOptionPane.PLAIN_MESSAGE,
-                                                    null,
-                                                    Vertice.Tipo.values(),
-                                                    Vertice.Tipo.values()[2]);
-            ((Vertice)tmp).setTipo(tipo);
-            tmp = null;
+            estadoNuevoVertice(e);
             repaint();
         }else if(estado == Estado.SELECCION){
-            //Seleccionar mas cercano
-
-            elementos.stream().sorted();
-
-
-
+            estadoSeleccion(e);
+            repaint();
             return;
         }
 
         estado = Estado.NADA;
+        this.grabFocus();
         setCursor(Cursor.getDefaultCursor());
+    }
+
+    private void estadoNuevoVertice(MouseEvent e){
+        tmp.setPosicion(e.getPoint());
+        Vertice.Tipo tipo = (Vertice.Tipo) JOptionPane.showInputDialog(null, "Tipo de Vertice:",
+                "Seleccionar tipo de Vertice",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                Vertice.Tipo.values(),
+                Vertice.Tipo.values()[2]);
+        ((Vertice)tmp).setTipo(tipo);
+        tmp = null;
+    }
+
+    private void estadoSeleccion(MouseEvent e){
+        int min = Integer.MAX_VALUE;
+        int indice = -1;
+
+        for(int i = 0; i < elementos.size(); i++){
+            int dist = (int)elementos.get(i).getPosicion().distance(e.getPoint());
+            if(dist < min && dist <= VerticeObservable.DIAMETRO_DIBUJO+5){
+                min = dist;
+                indice = i;
+            }
+        }
+
+        if(indice != -1){
+            Utils.LogD("Indice: "+indice);
+            elementos.get(indice).seleccionar();
+            seleccion.add(elementos.get(indice));
+        }
     }
 
     @Override

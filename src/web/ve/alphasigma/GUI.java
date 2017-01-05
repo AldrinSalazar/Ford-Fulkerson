@@ -1,5 +1,6 @@
 package web.ve.alphasigma;
 
+import web.ve.alphasigma.controlador.AristaObservable;
 import web.ve.alphasigma.controlador.Controlador;
 import web.ve.alphasigma.controlador.VerticeObservable;
 import web.ve.alphasigma.vista.PanelGrafos;
@@ -24,7 +25,7 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
 
     private JFrame marco_ventana;
 
-    private PanelGrafos panel_canvas;
+    public PanelGrafos panel_canvas;
     private JPanel panel_botones;
 
     private JButton btn_nuevo_vertice;
@@ -132,7 +133,8 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     }
 
     private void clickBotonNuevoArista(){
-
+        AristaObservable a = controlador.nuevaArista();
+        panel_canvas.añadirDibujable(a);
     }
 
     private void clickBotonEditar(){

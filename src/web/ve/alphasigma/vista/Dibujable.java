@@ -25,4 +25,6 @@ public interface Dibujable {
     void dibujar(Graphics g);
     void setPosicion(Point p);
     Point getPosicion();
+    void seleccionar();
+    boolean estaSeleccionado();
 }
