@@ -60,6 +60,11 @@ public class Modelo {
         corriendo = false;
     }
 
+    //TODO:Documentar?
+    public String estado(){
+        return String.format("Modelo, %d Aristas, %d Vertices.", aristas.size(), vertices.size());
+    }
+
     /**
      * Limpia la lista de Vertices y Aristas del Modelo.
      */
@@ -98,6 +103,33 @@ public class Modelo {
         } else {
             throw new IllegalArgumentException("Vertices que componen la arista no existen en el modelo.");
         }
+    }
+
+    //TODO:Documentar
+    public void eliminar(Identificable d){
+        for (int i = 0; i<aristas.size(); i++){
+            if(aristas.get(i).equals(d)){
+                aristas.remove(i);
+                return;
+            }
+        }
+
+        for (int i = 0; i<vertices.size(); i++){
+            if(vertices.get(i).equals(d)){
+                vertices.remove(i);
+                return;
+            }
+        }
+    }
+
+    //TODO:Documentar
+    public List<Arista> dependencias(Vertice e){
+        List<Arista> re;
+        re = aristas.stream()
+                .filter((Arista t) -> t.getFin().equals(e) || t.getInicio().equals(e))
+                .collect(Collectors.toList());
+
+        return re;
     }
 
     /**

@@ -8,6 +8,7 @@ import web.ve.alphasigma.vista.PanelGrafos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class GUI {//TODO: Documentacion, Acoplar al modelo
     private static final int ancho = 800;
@@ -133,15 +134,17 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     }
 
     private void clickBotonNuevoArista(){
-        AristaObservable a = controlador.nuevaArista();
-        panel_canvas.añadirDibujable(a);
+        ArrayList<AristaObservable> a = controlador.nuevaArista();
+        a.forEach(panel_canvas::añadirDibujable);
     }
 
     private void clickBotonEditar(){
-
+        controlador.debug();
     }
 
-    private void clickBotonBorrar(){}
+    private void clickBotonBorrar(){
+        controlador.borrar();
+    }
 
     private void clickBotonAnterior(){}
 

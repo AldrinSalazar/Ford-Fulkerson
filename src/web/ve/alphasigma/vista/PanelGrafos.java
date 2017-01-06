@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PanelGrafos extends JPanel
@@ -56,7 +57,14 @@ public class PanelGrafos extends JPanel
         this.estado = e;
     }
 
+    public void añadirDibujable(Dibujable... d){
+        Arrays.asList(d).forEach(this::añadirDibujable);
+    }
+
     public void añadirDibujable(Dibujable d){
+        if(d == null)
+            return;
+
         elementos.add(d);
 
         if(d instanceof Vertice) {
@@ -70,6 +78,7 @@ public class PanelGrafos extends JPanel
 
     public void quitarDibujable(Dibujable d){
         elementos.remove(d);
+        repaint();
     }
 
     @Override
@@ -106,7 +115,7 @@ public class PanelGrafos extends JPanel
         tmp.setPosicion(e.getPoint());
         Vertice.Tipo tipo = (Vertice.Tipo) JOptionPane.showInputDialog(null, "Tipo de Vertice:",
                 "Seleccionar tipo de Vertice",
-                JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.QUESTION_MESSAGE,
                 null,
                 Vertice.Tipo.values(),
                 Vertice.Tipo.values()[2]);
@@ -128,8 +137,15 @@ public class PanelGrafos extends JPanel
 
         if(indice != -1){
             Utils.LogD("Indice: "+indice);
+            boolean prev = elementos.get(indice).estaSeleccionado();
             elementos.get(indice).seleccionar();
-            seleccion.add(elementos.get(indice));
+
+            if(prev){
+                seleccion.remove(elementos.get(indice));
+            }else{
+                seleccion.add(elementos.get(indice));
+            }
+
         }
     }
 
