@@ -172,8 +172,11 @@ public class PanelGrafos extends JPanel
     public void mouseReleased(MouseEvent e) {
         if(estado == Estado.MOVIENDO){
             estado = Estado.NADA;
+            seleccion.forEach(Dibujable::seleccionar);
+            seleccion.clear();
             this.grabFocus();
             setCursor(Cursor.getDefaultCursor());
+            repaint();
         }
     }
 

@@ -93,6 +93,66 @@ public class Controlador {
         aBorrar.forEach((Identificable d) -> vista.panel_canvas.quitarDibujable((Dibujable)d));
     }
 
+    //TODO:Documentar, refactorizar
+    public void editar(){
+        Dibujable a_editar;
+
+        if(vista.panel_canvas.seleccion.size() == 0){
+            JOptionPane.showMessageDialog(null, "Error: Sin elementos seleccionados.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }else {
+            a_editar = vista.panel_canvas.seleccion.get(0);
+        }
+
+        if(a_editar instanceof VerticeObservable){
+            VerticeObservable selVertice = (VerticeObservable) a_editar;
+            Vertice.Tipo tipo = (Vertice.Tipo) JOptionPane.showInputDialog(null, "Tipo de Vertice:",
+                    "Seleccionar tipo de Vertice",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    Vertice.Tipo.values(),
+                    selVertice.getTipo());
+            selVertice.setTipo(tipo);
+            vista.panel_canvas.repaint();
+            vista.panel_canvas.grabFocus();
+        }else if(a_editar instanceof AristaObservable){
+            AristaObservable selArista = (AristaObservable) a_editar;
+
+            JTextField capacidad = new JTextField();
+            JTextField flujo = new JTextField();
+
+            capacidad.setText(""+selArista.getCapacidad());
+            flujo.setText(""+selArista.getFlujo());
+
+            final JComponent[] inputs = new JComponent[] {
+                    new JLabel("Capacidad"),
+                    capacidad,
+                    new JLabel("Flujo"),
+                    flujo,
+            };
+
+            JOptionPane.showConfirmDialog(null, inputs, "Editar Arista", JOptionPane.DEFAULT_OPTION);
+
+            selArista.setCapacidad(Integer.parseInt(capacidad.getText()));
+            selArista.setFlujo(Integer.parseInt(flujo.getText()));
+
+            vista.panel_canvas.repaint();
+            vista.panel_canvas.grabFocus();
+        }
+
+        vista.panel_canvas.seleccion.forEach(Dibujable::seleccionar);
+        vista.panel_canvas.seleccion.clear();
+    }
+
+    public void resolver(){
+        vista.panel_canvas.seleccion.forEach(Dibujable::seleccionar);
+        vista.panel_canvas.seleccion.clear();
+
+        int flujo = modelo.algoritmoFordFulkerson();
+        JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+flujo, "Resultado", JOptionPane.INFORMATION_MESSAGE);
+        vista.panel_canvas.repaint();
+    }
+
     public void debug() {
         System.out.println(modelo.estado());
     }

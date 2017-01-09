@@ -149,10 +149,13 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
 
     private void clickBotonEditar(){
         controlador.debug();
+        controlador.editar();
     }
 
     private void clickBotonSiguiente(){}
 
-    private void clickBotonIniciar(){}
+    private void clickBotonIniciar(){
+        controlador.resolver();
+    }
 
 }
