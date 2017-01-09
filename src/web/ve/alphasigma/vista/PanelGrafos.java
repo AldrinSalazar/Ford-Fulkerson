@@ -27,20 +27,24 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PanelGrafos extends JPanel
         implements MouseMotionListener, MouseListener, KeyListener{
     private enum Estado{
         NUEVO_VERTICE,
         NADA,
-        SELECCION
+        SELECCION,
+        MOVIENDO
     }
 
     private List<Dibujable> elementos;
     private Estado estado;
 
     private Dibujable tmp;
+    private Point movInicio;
     public List<Dibujable> seleccion;
+
 
     public PanelGrafos() {
         elementos = new ArrayList<>();
@@ -79,6 +83,13 @@ public class PanelGrafos extends JPanel
     public void quitarDibujable(Dibujable d){
         elementos.remove(d);
         repaint();
+    }
+
+    public void mover(){
+        if(seleccion.size() > 0){
+            estado = Estado.MOVIENDO;
+            setCursor(new Cursor(Cursor.MOVE_CURSOR));
+        }
     }
 
     @Override
@@ -151,12 +162,19 @@ public class PanelGrafos extends JPanel
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        if(estado == Estado.MOVIENDO){
+            System.out.println("setPoint");
+            movInicio = e.getPoint();
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        if(estado == Estado.MOVIENDO){
+            estado = Estado.NADA;
+            this.grabFocus();
+            setCursor(Cursor.getDefaultCursor());
+        }
     }
 
     @Override
@@ -171,6 +189,15 @@ public class PanelGrafos extends JPanel
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if(estado == Estado.MOVIENDO) {
+            seleccion.forEach((Dibujable d) -> {
+                int diffX = e.getX() - movInicio.x;
+                int diffY = e.getY() - movInicio.y;
+                d.setPosicion(new Point(d.getPosicion().x + diffX, d.getPosicion().y + diffY));
+            });
+            movInicio = e.getPoint();
+            repaint();
+        }
     }
 
     @Override

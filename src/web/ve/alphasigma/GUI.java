@@ -17,12 +17,11 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     private static final String titulo = "Algoritmo de Ford-Fulkerson";
     private static final String titulo_btn_nuevo_vertice = "Nuevo vertice";
     private static final String titulo_btn_nuevo_arista = "Nueva arista";
-
     private static final String titulo_btn_borrar = "Borrar";
+    private static final String titulo_btn_mover = "Mover";
     private static final String titulo_btn_editar = "Editar";
     private static final String titulo_btn_iniciar = "Resolver";
     private static final String titulo_btn_siguiente = "Paso siguiente";
-    private static final String titulo_btn_anterior = "Paso anterior";
 
     private JFrame marco_ventana;
 
@@ -32,10 +31,10 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
     private JButton btn_nuevo_vertice;
     private JButton btn_nuevo_arista;
     private JButton btn_borrar;
+    private JButton btn_mover;
     private JButton btn_editar;
     private JButton btn_iniciar;
     private JButton btn_siguiente;
-    private JButton btn_anterior;
 
     private Controlador controlador;
 
@@ -61,7 +60,7 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
         panel_botones.add(btn_nuevo_arista);
         panel_botones.add(btn_editar);
         panel_botones.add(btn_borrar);
-        panel_botones.add(btn_anterior);
+        panel_botones.add(btn_mover);
         panel_botones.add(btn_siguiente);
         panel_botones.add(btn_iniciar);
 
@@ -84,10 +83,10 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
         btn_nuevo_vertice = new JButton(titulo_btn_nuevo_vertice);
         btn_nuevo_arista = new JButton(titulo_btn_nuevo_arista);
         btn_borrar = new JButton(titulo_btn_borrar);
+        btn_mover = new JButton(titulo_btn_mover);
         btn_editar = new JButton(titulo_btn_editar);
         btn_iniciar = new JButton(titulo_btn_iniciar);
         btn_siguiente = new JButton(titulo_btn_siguiente);
-        btn_anterior = new JButton(titulo_btn_anterior);
 
         btn_nuevo_vertice.addActionListener((ActionEvent e) -> {
                 Utils.LogD("Click nuevo vertice");
@@ -102,6 +101,11 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
         btn_borrar.addActionListener((ActionEvent e) -> {
                 Utils.LogD("Click borrar");
                 clickBotonBorrar();
+        });
+
+        btn_mover.addActionListener((ActionEvent e) -> {
+            Utils.LogD("Click boton mover");
+            clickBotonMover();
         });
 
         btn_editar.addActionListener((ActionEvent e) -> {
@@ -119,10 +123,7 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
                 clickBotonSiguiente();
         });
 
-        btn_anterior.addActionListener((ActionEvent e) -> {
-                Utils.LogD("Click boton anterior");
-                clickBotonAnterior();
-        });
+
 
     }
 
@@ -138,15 +139,17 @@ public class GUI {//TODO: Documentacion, Acoplar al modelo
         a.forEach(panel_canvas::añadirDibujable);
     }
 
-    private void clickBotonEditar(){
-        controlador.debug();
-    }
-
     private void clickBotonBorrar(){
         controlador.borrar();
     }
 
-    private void clickBotonAnterior(){}
+    private void clickBotonMover(){
+        panel_canvas.mover();
+    }
+
+    private void clickBotonEditar(){
+        controlador.debug();
+    }
 
     private void clickBotonSiguiente(){}
 
