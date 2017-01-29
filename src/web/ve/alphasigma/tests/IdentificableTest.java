@@ -15,6 +15,8 @@ public class IdentificableTest {//TODO: Documentacion
     public void getIdDiferentes() throws Exception {
         Identificable j = new Identificable();
         assertFalse(j.equals(i));
+
+        //Heisenberg plz
         assertTrue(j.equals(j));
         assertTrue(i.equals(i));
     }

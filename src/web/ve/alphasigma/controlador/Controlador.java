@@ -1,4 +1,5 @@
 /*
+ * Modelo.java       01/04/2017
  * Copyright (C) 2017  Aldrin Salazar
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -13,8 +14,8 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see http://www.gnu.org/licenses
+ *
  */
-
 package web.ve.alphasigma.controlador;
 
 

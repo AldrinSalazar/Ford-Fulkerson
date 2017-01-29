@@ -1,4 +1,5 @@
 /*
+ * AristaObservable.java    01/04/2017
  * Copyright (C) 2017  Aldrin Salazar
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -17,29 +18,55 @@
 
 package web.ve.alphasigma.controlador;
 
-
 import web.ve.alphasigma.modelo.Arista;
 import web.ve.alphasigma.modelo.Vertice;
 import web.ve.alphasigma.vista.Dibujable;
-
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * AristaObservable es una abstraccion de la arista basica del modelo, con la capacidad de ser dibujada en una interfaz
+ * y de aplicar el patron de ser observable
+ *
+ * @see web.ve.alphasigma.modelo.Arista
+ * @see web.ve.alphasigma.vista.Dibujable
+ * @version 1.0.0 01/25/2017
+ * @author Aldrin Salazar
+ */
 public class AristaObservable extends Arista implements Dibujable {
+
+    //Color de la flecha
     private static final Color COLOR_FLECHA = Color.BLACK;
+    //Color de la flecha al estar seleccionada
     private static final Color COLOR_FLECHA_SEL = Color.GREEN;
+    //Color del texto
     private static final Color COLOR_TEXTO = Color.RED;
+    //Color del texto al estar seleccionado
     private static final Color COLOR_TEXTO_SEL = Color.CYAN;
+    //Espacio entre centro de la flecha y donde se dibujara efectivamente
     private static final int OFFSET = ((VerticeObservable.DIAMETRO_DIBUJO)/2)+8;
+    //Ancho de la linea de la flecha
     private static final int ANCHO_LINEA = 2;
+    //Tamaño de la flecha
     private static final int TAMAÑO_FLECHA = 10;
+    //Numero de fuente del texto
     private static final int TAMAÑO_TEXTO = 15;
 
     private Observable observable;
     private Point posicion;
     private boolean seleccionado;
 
+    /**
+     * Ver Arista.
+     *
+     * @see Arista
+     * @param inicio Vertice donde inicia la Arista.
+     * @param fin Vertice donde finaliza la Arista
+     * @param capacidad Flujo maximo que puede correr por la Arista.
+     * @param flujo Flujo actual que recorre la Arista.
+     * @throws IllegalArgumentException En caso de Flujo mayor a capacidad, Flujo negativo o Capacidad negativa.
+     */
     public AristaObservable(Vertice inicio, Vertice fin, int capacidad, int flujo) throws IllegalArgumentException {
         super(inicio, fin, capacidad, flujo);
         observable = new Observable();
@@ -47,13 +74,27 @@ public class AristaObservable extends Arista implements Dibujable {
         seleccionado = false;
     }
 
+    /**
+     * Abreviacion para una Arista con flujo actual igual a 0.
+     *
+     * @param inicio Vertice donde inicia la Arista.
+     * @param fin Vertice donde finaliza la Arista
+     * @param capacidad Flujo maximo que puede correr por la Arista.
+     */
     public AristaObservable(Vertice inicio, Vertice fin, int capacidad) {
         this(inicio, fin, capacidad, 0);
     }
 
+    /**
+     * Abreviacion para una Arista con flujo actual igual a 0 y capacidad igual a 0.
+     *
+     * @param inicio Vertice donde inicia la Arista.
+     * @param fin Vertice donde finaliza la Arista
+     */
     public AristaObservable(Vertice inicio, Vertice fin) {
         this(inicio, fin, 0);
     }
+
 
     public void añadirObservador(Observer o){
         observable.addObserver(o);
@@ -62,6 +103,7 @@ public class AristaObservable extends Arista implements Dibujable {
     public void quitarObservador(Observer o){
         observable.deleteObserver(o);
     }
+
 
     @Override
     public void setCapacidad(int capacidad) {
@@ -80,7 +122,7 @@ public class AristaObservable extends Arista implements Dibujable {
         Point tmpI = ((Dibujable)getInicio()).getPosicion();
         Point tmpF = ((Dibujable)getFin()).getPosicion();
 
-        g.setColor(seleccionado ? COLOR_TEXTO_SEL : COLOR_FLECHA);
+        g.setColor(seleccionado ? COLOR_FLECHA_SEL : COLOR_FLECHA);
         ((Graphics2D) g).setStroke(new BasicStroke(ANCHO_LINEA));
 
         dibujarFlecha(g, tmpI.x, tmpI.y, tmpF.x, tmpF.y, TAMAÑO_FLECHA, TAMAÑO_FLECHA, OFFSET);
@@ -92,15 +134,15 @@ public class AristaObservable extends Arista implements Dibujable {
     }
 
     /**
-     * Draw an arrow line betwwen two point
-     * @param g the graphic component
-     * @param x1o x-position of first point
-     * @param y1o y-position of first point
-     * @param x2o x-position of second point
-     * @param y2o y-position of second point
-     * @param d  the width of the arrow
-     * @param h  the height of the arrow
-     * @param offset offset del centro
+     * Dibuja una flecha recta entre dos puntos
+     * @param g Buffer a dibujar
+     * @param x1o X punto 1
+     * @param y1o Y punto 1
+     * @param x2o X punto 2
+     * @param y2o Y punto 2
+     * @param d  Ancho de la flecha
+     * @param h  Alto de la flecha
+     * @param offset Offset del centro
      */
     private void dibujarFlecha(Graphics g, int x1o, int y1o, int x2o, int y2o, int d, int h, int offset){
         int dxo = x2o - x1o, dyo = y2o - y1o;

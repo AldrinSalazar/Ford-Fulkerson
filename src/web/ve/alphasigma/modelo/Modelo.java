@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  *
  * @see Arista
  * @see Vertice
- * @version 1.0.0 1/4/2017
+ * @version 1.0.1 1/25/2017
  * @author Aldrin Salazar
  */
 public class Modelo {
@@ -60,7 +60,10 @@ public class Modelo {
         corriendo = false;
     }
 
-    //TODO:Documentar?
+    /**
+     * Indica el estado del modelo, en forma de string.
+     * @return Texto con el numero de aristas y vertices incluidos en el modelo.
+     */
     public String estado(){
         return String.format("Modelo, %d Aristas, %d Vertices.", aristas.size(), vertices.size());
     }
@@ -105,7 +108,11 @@ public class Modelo {
         }
     }
 
-    //TODO:Documentar
+    /**
+     * Elimina un elemento del modelo, puede ser una arista o un vertice, ya que se basa en un identificable.
+     * @see Identificable
+     * @param d Identificable a eliminar
+     */
     public void eliminar(Identificable d){
         for (int i = 0; i<aristas.size(); i++){
             if(aristas.get(i).equals(d)){
@@ -122,7 +129,11 @@ public class Modelo {
         }
     }
 
-    //TODO:Documentar
+    /**
+     * Busca y retorna todas las aristas que dependen de un vertice, estas son aquellas que parten o llegan a el.
+     * @param e Vertice a buscar sus dependencias.
+     * @return Lista con todas las dependencias del vertice.
+     */
     public List<Arista> dependencias(Vertice e){
         List<Arista> re;
         re = aristas.stream()
