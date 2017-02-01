@@ -17,7 +17,6 @@
 
 package web.ve.alphasigma.controlador;
 
-
 import com.sun.istack.internal.Nullable;
 import web.ve.alphasigma.modelo.Vertice;
 import web.ve.alphasigma.vista.Dibujable;
@@ -38,7 +37,7 @@ public class VerticeObservable extends Vertice implements Dibujable{
     public VerticeObservable(Tipo tipo, @Nullable String nombre, @Nullable Integer valor) {
         super(tipo, nombre, valor);
         observable = new Observable();
-        posicion = new Point(200, 200); //TODO:Refactorizar?
+        posicion = new Point(-100, -100); //TODO:Refactorizar?
         seleccionado = false;
     }
 
@@ -59,7 +58,7 @@ public class VerticeObservable extends Vertice implements Dibujable{
         g.setColor(seleccionado ? COLOR_SEL : COLOR);
         g.fillOval(posicion.x - RADIO_DIBUJO, posicion.y - RADIO_DIBUJO, DIAMETRO_DIBUJO, DIAMETRO_DIBUJO);
         g.setColor(Color.BLACK);
-        ((Graphics2D) g).setStroke(new BasicStroke(4));
+        ((Graphics2D) g).setStroke(new BasicStroke(2));
         g.drawOval(posicion.x - RADIO_DIBUJO, posicion.y - RADIO_DIBUJO, DIAMETRO_DIBUJO, DIAMETRO_DIBUJO);
 
         g.setFont(new Font("TimesRoman", Font.BOLD, 20));

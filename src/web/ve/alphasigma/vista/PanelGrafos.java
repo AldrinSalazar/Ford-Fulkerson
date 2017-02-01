@@ -1,6 +1,7 @@
 /*
  * PanelGrafos.java       01/04/2017
  * Copyright (C) 2017  Aldrin Salazar
+ * https://github.com/AldrinSalazar/Ford-Fulkerson
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -96,7 +97,12 @@ public class PanelGrafos extends JPanel
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        elementos.forEach((Dibujable d) -> d.dibujar(g));
+        Graphics2D g2 = (Graphics2D)g;
+        RenderingHints rh = new RenderingHints(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHints(rh);
+        elementos.forEach((Dibujable d) -> d.dibujar(g2));
     }
 
     @Override

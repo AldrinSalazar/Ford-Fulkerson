@@ -1,6 +1,7 @@
 /*
  * GUI.java       01/04/2017
  * Copyright (C) 2017  Aldrin Salazar
+ * https://github.com/AldrinSalazar/Ford-Fulkerson
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -28,7 +29,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class GUI {//TODO: Documentacion, Acoplar al modelo
+public class GUI {//TODO: Documentacion
     private static final int ancho = 800;
     private static final int alto = 400;
 

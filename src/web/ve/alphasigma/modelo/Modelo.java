@@ -1,6 +1,7 @@
 /*
  * Modelo.java       01/04/2017
- * Copyright (C) 2017  Aldrin Salazar
+ * Copyright (C) 2017  Aldrin Salazar.
+ * https://github.com/AldrinSalazar/Ford-Fulkerson
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -253,14 +254,14 @@ public class Modelo {
 
         //Se necesita marcar cada nodo ya visitado
         ArrayList<Vertice> visitados = new ArrayList<>();
-        //Se guarda el orden en que recorremos, para hacer backtracking y para obtener el recorrido
+        //Se guarda el orden en que recorremos en una pila, para hacer backtracking y para obtener el recorrido
         Stack<Vertice> control = new Stack<>();
 
         //Inicia en el origen
         Vertice actual = origen;
 
         do {
-            visitados.add(actual);                                      //.. se marca el actual como visitado ..
+            visitados.add(actual);                                      //Se marca el actual como visitado ..
             control.add(actual);                                        //.. se añade el actual al camino tentativo ..
 
             Optional<Vertice> siguiente = adyacentes(actual).stream()   //Para cada Vertice adyacente al actual ..

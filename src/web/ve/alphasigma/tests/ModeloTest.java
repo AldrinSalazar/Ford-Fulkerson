@@ -17,6 +17,7 @@ public class ModeloTest {//TODO: Documentacion
         modelo = new Modelo();
     }
 
+    //Los vertices del modelo deben tener aristas en el modelo
     @Test(expected = IllegalArgumentException.class)
     public void validarAristaConVerticeSinIncluir(){
         Vertice v1 = new Vertice();
@@ -30,6 +31,7 @@ public class ModeloTest {//TODO: Documentacion
         modelo.añadirArista(a1, a2);
     }
 
+    //Un vertice añadido al modelo lo contiene
     @Test
     public void añadirVerticeTest(){
         Vertice a = new Vertice();
@@ -37,6 +39,7 @@ public class ModeloTest {//TODO: Documentacion
         assertTrue(modelo.getVertices().contains(a));
     }
 
+    //Se pueden colocar todos los flujos en 0
     @Test
     public void aristasFlujoCeroTest(){
         Vertice a = new Vertice();
@@ -54,6 +57,7 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals(0, bc.getFlujo());
     }
 
+    //Prueba de calcular los vertices adyacentes a un vertice
     @Test
     public void adyacentesTest(){
         Vertice a = new Vertice();
@@ -92,17 +96,20 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals(1, adyacentes.size());
     }
 
+    //Modelo sin fuente
     @Test
     public void encontrarOrigen1(){
         assertEquals(null, modelo.encontrarFuente());
     }
 
+    //modelo sin fuente
     @Test
     public void encontrarOrigen2(){
         modelo.añadirVertice(new Vertice());
         assertEquals(null, modelo.encontrarFuente());
     }
 
+    //Modelo con fuente
     @Test
     public void encontrarOrigen3(){
         Vertice f = new Vertice(Vertice.Tipo.FUENTE);
@@ -110,6 +117,7 @@ public class ModeloTest {//TODO: Documentacion
         assertTrue(f.equals(modelo.encontrarFuente()));
     }
 
+    //Prueba la busqueda de camino entre vertices
     @Test
     public void existeCamino1(){
         Vertice a = new Vertice();
@@ -118,6 +126,7 @@ public class ModeloTest {//TODO: Documentacion
         assertNull(modelo.existeCamino(a, b));
     }
 
+    //Prueba los caminos vacios
     @Test
     public void existeCamino2(){
         Vertice a = new Vertice();
@@ -132,6 +141,7 @@ public class ModeloTest {//TODO: Documentacion
         assertNull(modelo.existeCamino(a, c));
     }
 
+    //Prueba los caminos vacios
     @Test
     public void existeCamino3(){
         Vertice a = new Vertice();
@@ -164,11 +174,13 @@ public class ModeloTest {//TODO: Documentacion
         assertNull(modelo.existeCamino(z, a));
     }
 
+    //un modelo vacio no es valido
     @Test
     public void redEsValida1(){
         assertFalse(modelo.redEsValida());
     }
 
+    //Diferentes pruebas de validez
     @Test
     public void redEsValida2(){
         Vertice a = new Vertice();
@@ -203,6 +215,7 @@ public class ModeloTest {//TODO: Documentacion
         assertTrue(modelo.redEsValida());
     }
 
+    //Prueba la lista de aristas entre dos vertices
     @Test
     public void caminoEntreVertices1(){
         int v1 = 1996;
@@ -252,6 +265,7 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals((Integer)v3, caminoAristas.get(0).getValor());
     }
 
+    //Prueba el flujo maximo en una red conocida
     @Test
     public void algoritmoFordFulkerson1(){
         Vertice a = new Vertice(Vertice.Tipo.FUENTE);
@@ -275,6 +289,7 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals(15, modelo.algoritmoFordFulkerson());
     }
 
+    //Prueba de flujo maximo en una red conocida
     @Test
     public void algoritmoFordFulkerson2(){
         Vertice s = new Vertice(Vertice.Tipo.FUENTE);
