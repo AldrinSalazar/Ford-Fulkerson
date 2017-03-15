@@ -36,7 +36,7 @@ public class Arista extends Conexion{
 
     /** *Flujo es el flujo actual circulando en la Arista*/
     private int flujo;
-
+    private boolean invertida;
     /**
      * Una Arista requiere tener un Vertice de origen, un Vertice de destino ademas de una capacidad y flujo positivos.
      * La direccion esta en el sentido Inicio -> Fin:
@@ -60,6 +60,7 @@ public class Arista extends Conexion{
 
         this.capacidad = capacidad;
         this.flujo = flujo;
+        this.invertida = false;
     }
 
     /**
@@ -129,11 +130,16 @@ public class Arista extends Conexion{
             invertir el sentido de la Arista, conservando la capacidad pero con flujo 0.*/
             this.flujo = 0;
             invertir();
+            this.invertida = true;
         }else if(flujo < 0) {
             throw new IllegalArgumentException("Flujo negativo");
         }else {
             this.flujo = flujo;
         }
+    }
+
+    public void overFlujo(int flujo){
+        this.flujo = flujo;
     }
 
     /**
@@ -143,5 +149,9 @@ public class Arista extends Conexion{
      */
     public int getFlujoRestante(){
         return this.capacidad - this.flujo;
+    }
+
+    public boolean isInvertida() {
+        return invertida;
     }
 }

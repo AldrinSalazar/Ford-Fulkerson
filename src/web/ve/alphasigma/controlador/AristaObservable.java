@@ -43,7 +43,7 @@ public class AristaObservable extends Arista implements Dibujable {
     //Color del texto
     private static final Color COLOR_TEXTO = Color.RED;
     //Color del texto al estar seleccionado
-    private static final Color COLOR_TEXTO_SEL = Color.CYAN;
+    private static final Color COLOR_TEXTO_SEL = Color.WHITE;
     //Espacio entre centro de la flecha y donde se dibujara efectivamente
     private static final int OFFSET = ((VerticeObservable.DIAMETRO_DIBUJO)/2)+8;
     //Ancho de la linea de la flecha
@@ -129,8 +129,14 @@ public class AristaObservable extends Arista implements Dibujable {
         posicion = new Point((tmpI.x + tmpF.x)/2, (tmpI.y + tmpF.y)/2);
 
         g.setFont(new Font("TimesRoman", Font.BOLD, TAMAÑO_TEXTO));
-        g.setColor(seleccionado ? COLOR_TEXTO : COLOR_TEXTO_SEL);
-        g.drawString(getFlujo()+"/"+getCapacidad(), posicion.x, posicion.y);
+        g.setColor(seleccionado ? COLOR_TEXTO_SEL : COLOR_TEXTO);
+
+        if(getFlujo() != 0){
+            g.drawString(getFlujo()+"/"+getCapacidad(), posicion.x, posicion.y - 10);
+        }else {
+            g.drawString(getCapacidad()+"", posicion.x, posicion.y - 10);
+        }
+
     }
 
     /**

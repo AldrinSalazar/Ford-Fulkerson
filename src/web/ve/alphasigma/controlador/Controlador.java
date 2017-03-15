@@ -27,15 +27,13 @@ import web.ve.alphasigma.modelo.Vertice;
 import web.ve.alphasigma.vista.Dibujable;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controlador {
     private Modelo modelo;
     private GUI vista;
+    private int flujo;
 
     public Controlador() {
         this.modelo = new Modelo();
@@ -120,22 +118,20 @@ public class Controlador {
             AristaObservable selArista = (AristaObservable) a_editar;
 
             JTextField capacidad = new JTextField();
-            JTextField flujo = new JTextField();
 
-            capacidad.setText(""+selArista.getCapacidad());
-            flujo.setText(""+selArista.getFlujo());
+            //TODO:DESCOMENTAR
+            //capacidad.setText(""+selArista.getCapacidad());
+            capacidad.setText(""+new Random().nextInt(100));
 
             final JComponent[] inputs = new JComponent[] {
                     new JLabel("Capacidad"),
                     capacidad,
-                    new JLabel("Flujo"),
-                    flujo,
             };
 
             JOptionPane.showConfirmDialog(null, inputs, "Editar Arista", JOptionPane.DEFAULT_OPTION);
 
             selArista.setCapacidad(Integer.parseInt(capacidad.getText()));
-            selArista.setFlujo(Integer.parseInt(flujo.getText()));
+            selArista.setFlujo(0);
 
             vista.panel_canvas.repaint();
             vista.panel_canvas.grabFocus();
@@ -149,9 +145,19 @@ public class Controlador {
         vista.panel_canvas.seleccion.forEach(Dibujable::seleccionar);
         vista.panel_canvas.seleccion.clear();
 
-        int flujo = modelo.algoritmoFordFulkerson();
+
+        flujo = modelo.algoritmoFordFulkerson();
+
         JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+flujo, "Resultado", JOptionPane.INFORMATION_MESSAGE);
         vista.panel_canvas.repaint();
+    }
+
+    public void resolverPaso(){
+        Thread t = new Thread(()->{
+            modelo.algoritmoFordFulkersonPaso(vista.panel_canvas);
+        }, "Calcular paso por paso.");
+
+        t.start();
     }
 
     public void debug() {

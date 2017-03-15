@@ -19,6 +19,10 @@
  */
 package web.ve.alphasigma.modelo;
 
+import web.ve.alphasigma.controlador.AristaObservable;
+import web.ve.alphasigma.vista.PanelGrafos;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -33,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * @see Arista
  * @see Vertice
- * @version 1.0.1 1/25/2017
+ * @version 1.0.2 1/25/2017
  * @author Aldrin Salazar
  */
 public class Modelo {
@@ -251,12 +255,10 @@ public class Modelo {
         /**
          * Implementacion del algoritmo Depth-first para recorrida de un Grafo.
          */
-
         //Se necesita marcar cada nodo ya visitado
         ArrayList<Vertice> visitados = new ArrayList<>();
         //Se guarda el orden en que recorremos en una pila, para hacer backtracking y para obtener el recorrido
         Stack<Vertice> control = new Stack<>();
-
         //Inicia en el origen
         Vertice actual = origen;
 
@@ -342,7 +344,88 @@ public class Modelo {
             camino.forEach((Arista e) -> e.setFlujo(e.getFlujo() + flujoMenor)); //4- Se aumenta el flujo en cada Arista del camino en esa cantidad
             flujoMaximo += flujoMenor;                                           //5- Esta cantidad se suma al flujo maximo.
         }
+        traducir(this.aristas);
+        resaltar(this.aristas, false);
 
+        return flujoMaximo;
+    }
+
+    private void traducir(List<Arista> aristas){
+        aristas.forEach((arista) -> {
+            if(arista.isInvertida()){
+                arista.invertir();
+                arista.overFlujo(arista.getCapacidad());
+            }
+        });
+    }
+
+    private void resaltar(List<Arista> aristas, boolean forzar){
+        aristas.forEach((arista) -> {
+            if(arista.getFlujo() > 0 || forzar){
+                ((AristaObservable) arista).seleccionar();
+            }
+        });
+    }
+
+    private void desResaltar(List<Arista> aristas){
+        aristas.forEach((arista) -> {
+            if( ((AristaObservable) arista).estaSeleccionado()){
+                ((AristaObservable) arista).seleccionar();
+            }
+        });
+    }
+
+    /**
+     * Implementacion del algoritmo Ford-Fulkerson para determinar el flujo maximo de una red de Grafos dirigidos.
+     *  Realiza paso a paso cada iteracion
+     * @return El flujo maximo entre la fuente y el sumidero de la red.
+     * @throws IllegalStateException En caso de no ser valida la red.
+     */
+    public int algoritmoFordFulkersonPaso(PanelGrafos p) throws IllegalStateException{
+        /**
+         * Algoritmo Ford-Fulkerson, con busqueda Depth-First.
+         */
+
+        //La red debe ser valida
+        if(!redEsValida())
+            throw new IllegalStateException("Red invalida");
+
+        //Flujo maximo de la red
+        int flujoMaximo = 0;
+        Vertice origen = encontrarFuente();
+        Vertice sumidero = encontrarSumidero();
+        //Camino desde Origen a Sumidero
+        List<Vertice> caminoVertice;
+
+        setAristasFlujoCero();                                              //1- Establecer a 0 el flujo de todas las aristas
+        while ((caminoVertice = existeCamino(origen, sumidero)) != null){   //2- Mientras exista un camino entre el Origen y el Sumidero
+            System.out.println("Calculo ..");
+
+            List<Arista> camino = caminoEntreVertices(caminoVertice);
+            desResaltar(this.aristas);
+            resaltar(camino, true);
+            p.repaint();
+
+            int flujoMenor = camino.stream()                                //3- Para cada Arista del camino ...
+                    .mapToInt(Arista::getFlujoRestante)                     //   .. se toma el flujo que puede aumentar ..
+                    .min()                                                  //   .. el menor flujo ..
+                    .getAsInt();                                            //   .. se guarda.
+
+            camino.forEach((Arista e) -> e.setFlujo(e.getFlujo() + flujoMenor)); //4- Se aumenta el flujo en cada Arista del camino en esa cantidad
+            flujoMaximo += flujoMenor;                                           //5- Esta cantidad se suma al flujo maximo.
+            traducir(this.aristas);
+
+            JOptionPane.showMessageDialog(null, "Flujo minimo del camino:"+flujoMenor+"\n Flujo maximo acumulado:"+flujoMaximo,
+                                                "Resultado parcial", JOptionPane.INFORMATION_MESSAGE);
+
+            traducir(this.aristas);
+        }
+
+        desResaltar(this.aristas);
+        traducir(this.aristas);
+        resaltar(this.aristas, false);
+        p.repaint();
+        System.out.println("Final. Flujo maximo:"+flujoMaximo);
         return flujoMaximo;
     }
 }

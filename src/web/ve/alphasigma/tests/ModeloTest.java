@@ -17,7 +17,7 @@ public class ModeloTest {//TODO: Documentacion
         modelo = new Modelo();
     }
 
-    //Los vertices del modelo deben tener aristas en el modelo
+    //#1 Los vertices del modelo deben tener aristas en el modelo
     @Test(expected = IllegalArgumentException.class)
     public void validarAristaConVerticeSinIncluir(){
         Vertice v1 = new Vertice();
@@ -57,7 +57,7 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals(0, bc.getFlujo());
     }
 
-    //Prueba de calcular los vertices adyacentes a un vertice
+    //#2 Prueba de calcular los vertices adyacentes a un vertice
     @Test
     public void adyacentesTest(){
         Vertice a = new Vertice();
@@ -96,13 +96,12 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals(1, adyacentes.size());
     }
 
-    //Modelo sin fuente
+
     @Test
     public void encontrarOrigen1(){
         assertEquals(null, modelo.encontrarFuente());
     }
 
-    //modelo sin fuente
     @Test
     public void encontrarOrigen2(){
         modelo.añadirVertice(new Vertice());
@@ -117,7 +116,7 @@ public class ModeloTest {//TODO: Documentacion
         assertTrue(f.equals(modelo.encontrarFuente()));
     }
 
-    //Prueba la busqueda de camino entre vertices
+
     @Test
     public void existeCamino1(){
         Vertice a = new Vertice();
@@ -126,7 +125,6 @@ public class ModeloTest {//TODO: Documentacion
         assertNull(modelo.existeCamino(a, b));
     }
 
-    //Prueba los caminos vacios
     @Test
     public void existeCamino2(){
         Vertice a = new Vertice();
@@ -289,7 +287,7 @@ public class ModeloTest {//TODO: Documentacion
         assertEquals(15, modelo.algoritmoFordFulkerson());
     }
 
-    //Prueba de flujo maximo en una red conocida
+    //#5 Prueba de flujo maximo en una red conocida
     @Test
     public void algoritmoFordFulkerson2(){
         Vertice s = new Vertice(Vertice.Tipo.FUENTE);
