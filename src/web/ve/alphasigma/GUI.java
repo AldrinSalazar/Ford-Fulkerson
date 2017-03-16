@@ -58,7 +58,7 @@ public class GUI {//TODO: Documentacion
     private JButton btn_guardar;
     private JButton btn_cargar;
 
-    private Controlador controlador;
+    private final Controlador controlador;
 
     public GUI(Controlador controlador) {
         Utils.LogI("Iniciar Ventana");

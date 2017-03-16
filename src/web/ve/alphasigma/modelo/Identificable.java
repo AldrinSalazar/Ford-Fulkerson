@@ -34,7 +34,7 @@ public class Identificable implements Serializable {
 
     /** UUID (Universally Unique IDentifier) es un estandar de identificacion (ISO/IEC 9834-8:2005)
      *  que permite asignar aleatoriamente una ID con una probabilidad de colision de 5 * 10^-11 */
-    private UUID id;
+    private final UUID id;
 
     /** Nombre si se desea asignar alguno*/
     private String nombre;

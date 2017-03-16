@@ -29,7 +29,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PanelGrafos extends JPanel
         implements MouseMotionListener, MouseListener, KeyListener{
@@ -40,12 +39,12 @@ public class PanelGrafos extends JPanel
         MOVIENDO
     }
 
-    private List<Dibujable> elementos;
+    private final List<Dibujable> elementos;
     private Estado estado;
 
     private Dibujable tmp;
     private Point movInicio;
-    public List<Dibujable> seleccion;
+    public final List<Dibujable> seleccion;
 
 
     public PanelGrafos() {
@@ -59,16 +58,8 @@ public class PanelGrafos extends JPanel
         addKeyListener(this);
     }
 
-    public void setEstado(Estado e){
-        this.estado = e;
-    }
-
     public void añadirDibujableExistente(Dibujable d){
         elementos.add(d);
-    }
-
-    public void añadirDibujable(Dibujable... d){
-        Arrays.asList(d).forEach(this::añadirDibujable);
     }
 
     public void añadirDibujable(Dibujable d){

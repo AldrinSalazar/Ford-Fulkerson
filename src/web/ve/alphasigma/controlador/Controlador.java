@@ -20,7 +20,6 @@ package web.ve.alphasigma.controlador;
 
 
 import web.ve.alphasigma.GUI;
-import web.ve.alphasigma.modelo.Arista;
 import web.ve.alphasigma.modelo.Identificable;
 import web.ve.alphasigma.modelo.Modelo;
 import web.ve.alphasigma.modelo.Vertice;
@@ -31,9 +30,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controlador {
-    private Modelo modelo;
-    private GUI vista;
-    private int flujo;
+    private final Modelo modelo;
+    private final GUI vista;
 
     public Controlador() {
         this.modelo = new Modelo();
@@ -149,6 +147,7 @@ public class Controlador {
         vista.panel_canvas.seleccion.forEach(Dibujable::seleccionar);
         vista.panel_canvas.seleccion.clear();
 
+        int flujo;
         try {
             flujo = modelo.algoritmoFordFulkerson();
         }catch (IllegalStateException e){
@@ -156,7 +155,7 @@ public class Controlador {
             return;
         }
 
-        JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+flujo, "Resultado", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+ flujo, "Resultado", JOptionPane.INFORMATION_MESSAGE);
         vista.panel_canvas.repaint();
     }
 

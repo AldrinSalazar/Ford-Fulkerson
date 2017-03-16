@@ -22,7 +22,6 @@ import web.ve.alphasigma.modelo.Vertice;
 import web.ve.alphasigma.vista.Dibujable;
 
 import java.awt.*;
-import java.util.Observable;
 
 public class VerticeObservable extends Vertice implements Dibujable{
     public final static int DIAMETRO_DIBUJO = 40;
@@ -33,18 +32,14 @@ public class VerticeObservable extends Vertice implements Dibujable{
     private boolean seleccionado;
     private Point posicion;
 
-    public VerticeObservable(Tipo tipo, @Nullable String nombre, @Nullable Integer valor) {
-        super(tipo, nombre, valor);
+    private VerticeObservable(Tipo tipo, @Nullable String nombre) {
+        super(tipo, null, null);
         posicion = new Point(-100, -100); //TODO:Refactorizar?
         seleccionado = false;
     }
 
-    public VerticeObservable(Tipo tipo) {
-        this(tipo, null, null);
-    }
 
     public VerticeObservable() {
-        this(Tipo.NINGUNO);
     }
 
 

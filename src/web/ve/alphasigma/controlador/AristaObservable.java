@@ -22,8 +22,6 @@ import web.ve.alphasigma.modelo.Arista;
 import web.ve.alphasigma.modelo.Vertice;
 import web.ve.alphasigma.vista.Dibujable;
 import java.awt.*;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * AristaObservable es una abstraccion de la arista basica del modelo, con la capacidad de ser dibujada en una interfaz
@@ -63,24 +61,12 @@ public class AristaObservable extends Arista implements Dibujable {
      * @param inicio Vertice donde inicia la Arista.
      * @param fin Vertice donde finaliza la Arista
      * @param capacidad Flujo maximo que puede correr por la Arista.
-     * @param flujo Flujo actual que recorre la Arista.
      * @throws IllegalArgumentException En caso de Flujo mayor a capacidad, Flujo negativo o Capacidad negativa.
      */
-    public AristaObservable(Vertice inicio, Vertice fin, int capacidad, int flujo) throws IllegalArgumentException {
-        super(inicio, fin, capacidad, flujo);
+    private AristaObservable(Vertice inicio, Vertice fin, int capacidad) throws IllegalArgumentException {
+        super(inicio, fin, capacidad, 0);
         posicion = new Point(0,0);
         seleccionado = false;
-    }
-
-    /**
-     * Abreviacion para una Arista con flujo actual igual a 0.
-     *
-     * @param inicio Vertice donde inicia la Arista.
-     * @param fin Vertice donde finaliza la Arista
-     * @param capacidad Flujo maximo que puede correr por la Arista.
-     */
-    public AristaObservable(Vertice inicio, Vertice fin, int capacidad) {
-        this(inicio, fin, capacidad, 0);
     }
 
     /**
@@ -99,11 +85,6 @@ public class AristaObservable extends Arista implements Dibujable {
     }
 
     @Override
-    public void setFlujo(int flujo) throws IllegalArgumentException {
-        super.setFlujo(flujo);
-    }
-
-    @Override
     public void dibujar(Graphics g) {
         Point tmpI = ((Dibujable)getInicio()).getPosicion();
         Point tmpF = ((Dibujable)getFin()).getPosicion();
@@ -111,7 +92,7 @@ public class AristaObservable extends Arista implements Dibujable {
         g.setColor(seleccionado ? COLOR_FLECHA_SEL : COLOR_FLECHA);
         ((Graphics2D) g).setStroke(new BasicStroke(ANCHO_LINEA));
 
-        dibujarFlecha(g, tmpI.x, tmpI.y, tmpF.x, tmpF.y, TAMAÑO_FLECHA, TAMAÑO_FLECHA, OFFSET);
+        dibujarFlecha(g, tmpI.x, tmpI.y, tmpF.x, tmpF.y, TAMAÑO_FLECHA, OFFSET);
         posicion = new Point((tmpI.x + tmpF.x)/2, (tmpI.y + tmpF.y)/2);
 
         g.setFont(new Font("TimesRoman", Font.BOLD, TAMAÑO_TEXTO));
@@ -133,13 +114,12 @@ public class AristaObservable extends Arista implements Dibujable {
      * @param x2o X punto 2
      * @param y2o Y punto 2
      * @param d  Ancho de la flecha
-     * @param h  Alto de la flecha
      * @param offset Offset del centro
      */
-    private void dibujarFlecha(Graphics g, int x1o, int y1o, int x2o, int y2o, int d, int h, int offset){
+    private void dibujarFlecha(Graphics g, int x1o, int y1o, int x2o, int y2o, int d, int offset){
         int dxo = x2o - x1o, dyo = y2o - y1o;
         double Do = Math.sqrt(dxo*dxo + dyo*dyo);
-        double t = offset/Do;
+        double t = AristaObservable.OFFSET /Do;
 
         int x1 = (int)(((1 - t) * x1o)+(t * x2o));
         int y1 = (int)(((1 - t) * y1o)+(t * y2o));
@@ -148,7 +128,7 @@ public class AristaObservable extends Arista implements Dibujable {
 
         int dx = x2 - x1, dy = y2 - y1;
         double D = Math.sqrt(dx*dx + dy*dy);
-        double xm = D - d, xn = xm, ym = h, yn = -h, x;
+        double xm = D - AristaObservable.TAMAÑO_FLECHA, xn = xm, ym = AristaObservable.TAMAÑO_FLECHA, yn = -AristaObservable.TAMAÑO_FLECHA, x;
         double sin = dy/D, cos = dx/D;
 
         x = xm*cos - ym*sin + x1;

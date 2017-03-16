@@ -4,12 +4,10 @@ import org.junit.Test;
 import web.ve.alphasigma.modelo.Arista;
 import web.ve.alphasigma.modelo.Vertice;
 
-import static org.junit.Assert.*;
-
 public class AristaTest {//TODO: Documentacion
 
-    Vertice a;
-    Vertice b;
+    private final Vertice a;
+    private final Vertice b;
 
     public AristaTest() {
         a = new Vertice();

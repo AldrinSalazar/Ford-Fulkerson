@@ -56,7 +56,7 @@ public class Vertice extends Identificable implements Serializable{
      * @param nombre El nombre asignado. Opcional.
      * @param valor El valor asignado. Opcional.
      */
-    public Vertice(Tipo tipo, @Nullable String nombre, @Nullable Integer valor) {
+    protected Vertice(Tipo tipo, @Nullable String nombre, @Nullable Integer valor) {
         super(nombre, valor);
         this.tipo = tipo;
     }

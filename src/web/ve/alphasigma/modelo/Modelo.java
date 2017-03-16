@@ -50,9 +50,6 @@ public class Modelo {
     /** Lista de todas las aristas*/
     private List<Arista> aristas;
 
-    /** Control al correr el algoritmo paso por paso*/
-    private boolean corriendo;
-
     /**
      * El Modelo no requiere argumento alguno para su instanciacion.
      */
@@ -60,7 +57,8 @@ public class Modelo {
         //Inicializa las listas donde se almacenan los vertces y aristas.
         limpiarGrafoPrincipal();
         //El estado inicial es no corriendo.
-        corriendo = false;
+        /* Control al correr el algoritmo paso por paso*/
+        boolean corriendo = false;
     }
 
     /**
@@ -156,15 +154,6 @@ public class Modelo {
     }
 
     /**
-     * Obtiene la Lista de Aristas del Modelo.
-     *
-     * @return Lista con las Aristas del Modelo.
-     */
-    public List<Arista> getAristas() {
-        return aristas;
-    }
-
-    /**
      * Valida que una Arista posea ambos Vertices en el Modelo.
      *
      * @param e Arista a validar
@@ -201,7 +190,7 @@ public class Modelo {
      * @see Vertice
      * @return Instancia de Vertice de tipo SUMIDERO encontrado, o null de no existir.
      */
-    public Vertice encontrarSumidero(){
+    private Vertice encontrarSumidero(){
         Optional<Vertice> tmp = vertices.stream()
                 .filter((Vertice e) -> e.getTipo() == Vertice.Tipo.SUMIDERO)
                 .findFirst();
@@ -380,7 +369,7 @@ public class Modelo {
     private void limpiarEstadoYActualizar(PanelGrafos p){
         setAristasFlujoCero();
         this.aristas.forEach((a)->{
-            a.setInvertida(false);
+            a.setInvertida();
         });
 
         desResaltar(this.aristas);
@@ -393,7 +382,7 @@ public class Modelo {
      * @return El flujo maximo entre la fuente y el sumidero de la red.
      * @throws IllegalStateException En caso de no ser valida la red.
      */
-    public int algoritmoFordFulkersonPaso(PanelGrafos p) throws IllegalStateException{
+    public void algoritmoFordFulkersonPaso(PanelGrafos p) throws IllegalStateException{
         /**
          * Algoritmo Ford-Fulkerson, con busqueda Depth-First.
          */
@@ -442,8 +431,6 @@ public class Modelo {
 
         JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+flujoMaximo,
                 "Resultado", JOptionPane.INFORMATION_MESSAGE);
-
-        return flujoMaximo;
     }
 
     public void guardar(File f){

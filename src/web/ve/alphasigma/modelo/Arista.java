@@ -100,7 +100,7 @@ public class Arista extends Conexion implements Serializable{
      *
      * @param capacidad Capacidad a asignar.
      */
-    public void setCapacidad(int capacidad) throws IllegalArgumentException{
+    protected void setCapacidad(int capacidad) throws IllegalArgumentException{
         if(capacidad < 0){
             throw new IllegalArgumentException("Capacidad negativa.");
         }
@@ -161,7 +161,7 @@ public class Arista extends Conexion implements Serializable{
         return invertida;
     }
 
-    public void setInvertida(boolean invertida) {
-        this.invertida = invertida;
+    public void setInvertida() {
+        this.invertida = false;
     }
 }

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 
 public class ModeloTest {//TODO: Documentacion
-    Modelo modelo;
+    private final Modelo modelo;
 
     public ModeloTest() {
         modelo = new Modelo();
