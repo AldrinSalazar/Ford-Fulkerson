@@ -41,6 +41,8 @@ public class GUI {//TODO: Documentacion
     private static final String titulo_btn_editar = "Editar";
     private static final String titulo_btn_iniciar = "Resolver";
     private static final String titulo_btn_paso_por_paso = "Paso por paso";
+    private static final String titulo_btn_guardar = "Guardar";
+    private static final String titulo_btn_cargar = "Cargar";
 
     private JFrame marco_ventana;
 
@@ -53,6 +55,8 @@ public class GUI {//TODO: Documentacion
     private JButton btn_editar;
     private JButton btn_iniciar;
     private JButton btn_paso_por_paso;
+    private JButton btn_guardar;
+    private JButton btn_cargar;
 
     private Controlador controlador;
 
@@ -81,6 +85,8 @@ public class GUI {//TODO: Documentacion
         panel_botones.add(btn_mover);
         panel_botones.add(btn_paso_por_paso);
         panel_botones.add(btn_iniciar);
+        panel_botones.add(btn_guardar);
+        panel_botones.add(btn_cargar);
 
         marco_ventana.add(panel_botones, BorderLayout.SOUTH);
         marco_ventana.add(panel_canvas, BorderLayout.CENTER);
@@ -105,6 +111,8 @@ public class GUI {//TODO: Documentacion
         btn_editar = new JButton(titulo_btn_editar);
         btn_iniciar = new JButton(titulo_btn_iniciar);
         btn_paso_por_paso = new JButton(titulo_btn_paso_por_paso);
+        btn_guardar = new JButton(titulo_btn_guardar);
+        btn_cargar = new JButton(titulo_btn_cargar);
 
         btn_nuevo_vertice.addActionListener((ActionEvent e) -> {
                 Utils.LogD("Click nuevo vertice");
@@ -142,7 +150,15 @@ public class GUI {//TODO: Documentacion
         });
 
 
+        btn_guardar.addActionListener((ActionEvent e) -> {
+            Utils.LogD("Click guardar");
+            clickBotonGuardar();
+        });
 
+        btn_cargar.addActionListener((ActionEvent e) -> {
+            Utils.LogD("Click cargar");
+            clickBotonCargar();
+        });
     }
 
     // - // - // - // - // - // - // - // - // - //
@@ -179,4 +195,11 @@ public class GUI {//TODO: Documentacion
         controlador.resolver();
     }
 
+    private void clickBotonGuardar(){
+        controlador.guardar();
+    }
+
+    private void clickBotonCargar(){
+        controlador.cargar();
+    }
 }

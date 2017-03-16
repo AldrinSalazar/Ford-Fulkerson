@@ -21,6 +21,8 @@ package web.ve.alphasigma.modelo;
 
 import com.sun.istack.internal.NotNull;
 
+import java.io.Serializable;
+
 /**
  * Conexion representa la union unidireccional entre dos Vertices. Hereda de Identificable para poder ser comparada
  * facilmente en la implementacion de los algoritmos.
@@ -29,7 +31,7 @@ import com.sun.istack.internal.NotNull;
  * @version 1.0.0 1/4/2017
  * @author Aldrin Salazar
  */
-public class Conexion extends Identificable{
+public class Conexion extends Identificable implements Serializable{
 
     /** Vertices de inicio y fin.*/
     private Vertice inicio;

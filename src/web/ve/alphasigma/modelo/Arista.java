@@ -19,6 +19,8 @@
  */
 package web.ve.alphasigma.modelo;
 
+import java.io.Serializable;
+
 /**
  * Arista representa una Arista unidireccional en un campo de Grafos dirigidos.
  *
@@ -26,7 +28,7 @@ package web.ve.alphasigma.modelo;
  * @version 1.0.0 1/4/2017
  * @author Aldrin Salazar
  */
-public class Arista extends Conexion{
+public class Arista extends Conexion implements Serializable{
     /**
      * En esta implementacion de una Arista, esta posee solamente una capacidad y un flujo.
      */
@@ -98,7 +100,11 @@ public class Arista extends Conexion{
      *
      * @param capacidad Capacidad a asignar.
      */
-    public void setCapacidad(int capacidad) {
+    public void setCapacidad(int capacidad) throws IllegalArgumentException{
+        if(capacidad < 0){
+            throw new IllegalArgumentException("Capacidad negativa.");
+        }
+
         this.capacidad = capacidad;
     }
 
@@ -153,5 +159,9 @@ public class Arista extends Conexion{
 
     public boolean isInvertida() {
         return invertida;
+    }
+
+    public void setInvertida(boolean invertida) {
+        this.invertida = invertida;
     }
 }

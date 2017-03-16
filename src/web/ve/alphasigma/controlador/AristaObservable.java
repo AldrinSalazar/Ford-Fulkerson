@@ -53,7 +53,6 @@ public class AristaObservable extends Arista implements Dibujable {
     //Numero de fuente del texto
     private static final int TAMAÑO_TEXTO = 15;
 
-    private Observable observable;
     private Point posicion;
     private boolean seleccionado;
 
@@ -69,7 +68,6 @@ public class AristaObservable extends Arista implements Dibujable {
      */
     public AristaObservable(Vertice inicio, Vertice fin, int capacidad, int flujo) throws IllegalArgumentException {
         super(inicio, fin, capacidad, flujo);
-        observable = new Observable();
         posicion = new Point(0,0);
         seleccionado = false;
     }
@@ -95,26 +93,14 @@ public class AristaObservable extends Arista implements Dibujable {
         this(inicio, fin, 0);
     }
 
-
-    public void añadirObservador(Observer o){
-        observable.addObserver(o);
-    }
-
-    public void quitarObservador(Observer o){
-        observable.deleteObserver(o);
-    }
-
-
     @Override
     public void setCapacidad(int capacidad) {
         super.setCapacidad(capacidad);
-        this.observable.notifyObservers();
     }
 
     @Override
     public void setFlujo(int flujo) throws IllegalArgumentException {
         super.setFlujo(flujo);
-        this.observable.notifyObservers();
     }
 
     @Override

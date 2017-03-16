@@ -20,6 +20,8 @@
 package web.ve.alphasigma.modelo;
 
 import com.sun.istack.internal.Nullable;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -28,7 +30,7 @@ import java.util.UUID;
  * @version 1.0.0 1/4/2017
  * @author Aldrin Salazar
  */
-public class Identificable {
+public class Identificable implements Serializable {
 
     /** UUID (Universally Unique IDentifier) es un estandar de identificacion (ISO/IEC 9834-8:2005)
      *  que permite asignar aleatoriamente una ID con una probabilidad de colision de 5 * 10^-11 */

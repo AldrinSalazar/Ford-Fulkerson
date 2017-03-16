@@ -32,11 +32,9 @@ public class VerticeObservable extends Vertice implements Dibujable{
 
     private boolean seleccionado;
     private Point posicion;
-    private Observable observable;
 
     public VerticeObservable(Tipo tipo, @Nullable String nombre, @Nullable Integer valor) {
         super(tipo, nombre, valor);
-        observable = new Observable();
         posicion = new Point(-100, -100); //TODO:Refactorizar?
         seleccionado = false;
     }
@@ -49,9 +47,6 @@ public class VerticeObservable extends Vertice implements Dibujable{
         this(Tipo.NINGUNO);
     }
 
-    public Observable getObservable() {
-        return observable;
-    }
 
     @Override
     public void dibujar(Graphics g) {

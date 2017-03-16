@@ -119,9 +119,8 @@ public class Controlador {
 
             JTextField capacidad = new JTextField();
 
-            //TODO:DESCOMENTAR
-            //capacidad.setText(""+selArista.getCapacidad());
-            capacidad.setText(""+new Random().nextInt(100));
+            capacidad.setText(""+selArista.getCapacidad());
+            //capacidad.setText(""+new Random().nextInt(500));
 
             final JComponent[] inputs = new JComponent[] {
                     new JLabel("Capacidad"),
@@ -130,8 +129,13 @@ public class Controlador {
 
             JOptionPane.showConfirmDialog(null, inputs, "Editar Arista", JOptionPane.DEFAULT_OPTION);
 
-            selArista.setCapacidad(Integer.parseInt(capacidad.getText()));
-            selArista.setFlujo(0);
+            try {
+                selArista.setCapacidad(Integer.parseInt(capacidad.getText()));
+            }catch (IllegalArgumentException e){
+                JOptionPane.showMessageDialog(null, "Capacidad negativa.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+            selArista.overFlujo(0);
 
             vista.panel_canvas.repaint();
             vista.panel_canvas.grabFocus();
@@ -145,8 +149,12 @@ public class Controlador {
         vista.panel_canvas.seleccion.forEach(Dibujable::seleccionar);
         vista.panel_canvas.seleccion.clear();
 
-
-        flujo = modelo.algoritmoFordFulkerson();
+        try {
+            flujo = modelo.algoritmoFordFulkerson();
+        }catch (IllegalStateException e){
+            JOptionPane.showMessageDialog(null, "No se puede aplicar algoritmo, red inválida.\n Debe tener fuente, sumidero, y ser conexa.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+flujo, "Resultado", JOptionPane.INFORMATION_MESSAGE);
         vista.panel_canvas.repaint();
@@ -162,5 +170,27 @@ public class Controlador {
 
     public void debug() {
         System.out.println(modelo.estado());
+    }
+
+    public void guardar(){
+        JFileChooser f = new JFileChooser();
+        f.setApproveButtonText("Seleccionar");
+        f.setDialogTitle("Seleccionar carpeta a guardar");
+        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        f.showSaveDialog(null);
+
+        if(f.getSelectedFile() != null)
+            modelo.guardar(f.getSelectedFile());
+    }
+
+    public void cargar(){
+        JFileChooser f = new JFileChooser();
+        f.setApproveButtonText("Seleccionar");
+        f.setDialogTitle("Seleccionar carpeta a cargar");
+        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        f.showSaveDialog(null);
+
+        if(f.getSelectedFile() != null)
+            modelo.cargar(vista.panel_canvas, f.getSelectedFile());
     }
 }

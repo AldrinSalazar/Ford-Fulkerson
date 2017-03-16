@@ -21,6 +21,8 @@ package web.ve.alphasigma.modelo;
 
 import com.sun.istack.internal.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Vertice representa un Vertice en un campo de Grafos.
  *
@@ -28,7 +30,7 @@ import com.sun.istack.internal.Nullable;
  * @version 1.0.0 1/4/2017
  * @author Aldrin Salazar
  */
-public class Vertice extends Identificable{
+public class Vertice extends Identificable implements Serializable{
     /**
      * Esta implementacion en especifico asigna a cada instancia un tipo.
      */

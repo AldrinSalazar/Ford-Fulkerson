@@ -20,14 +20,12 @@
 package web.ve.alphasigma.modelo;
 
 import web.ve.alphasigma.controlador.AristaObservable;
+import web.ve.alphasigma.vista.Dibujable;
 import web.ve.alphasigma.vista.PanelGrafos;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -360,19 +358,33 @@ public class Modelo {
     }
 
     private void resaltar(List<Arista> aristas, boolean forzar){
-        aristas.forEach((arista) -> {
-            if(arista.getFlujo() > 0 || forzar){
-                ((AristaObservable) arista).seleccionar();
-            }
-        });
+        try {
+            aristas.forEach((arista) -> {
+                if (arista.getFlujo() > 0 || forzar) {
+                    ((AristaObservable) arista).seleccionar();
+                }
+            });
+        }catch (Exception e){}
     }
 
     private void desResaltar(List<Arista> aristas){
-        aristas.forEach((arista) -> {
-            if( ((AristaObservable) arista).estaSeleccionado()){
-                ((AristaObservable) arista).seleccionar();
-            }
+        try {
+            aristas.forEach((arista) -> {
+                if (((AristaObservable) arista).estaSeleccionado()) {
+                    ((AristaObservable) arista).seleccionar();
+                }
+            });
+        }catch (Exception e){}
+    }
+
+    private void limpiarEstadoYActualizar(PanelGrafos p){
+        setAristasFlujoCero();
+        this.aristas.forEach((a)->{
+            a.setInvertida(false);
         });
+
+        desResaltar(this.aristas);
+        p.repaint();
     }
 
     /**
@@ -390,6 +402,7 @@ public class Modelo {
         if(!redEsValida())
             throw new IllegalStateException("Red invalida");
 
+        limpiarEstadoYActualizar(p);
         //Flujo maximo de la red
         int flujoMaximo = 0;
         Vertice origen = encontrarFuente();
@@ -426,6 +439,115 @@ public class Modelo {
         resaltar(this.aristas, false);
         p.repaint();
         System.out.println("Final. Flujo maximo:"+flujoMaximo);
+
+        JOptionPane.showMessageDialog(null, "Flujo maximo de la red: "+flujoMaximo,
+                "Resultado", JOptionPane.INFORMATION_MESSAGE);
+
         return flujoMaximo;
+    }
+
+    public void guardar(File f){
+        try {
+            FileOutputStream verOut = new FileOutputStream(f+"/vertices.bin");
+            FileOutputStream ariOut = new FileOutputStream(f+"/aristas.bin");
+            ObjectOutputStream oos = new ObjectOutputStream(verOut);
+            ObjectOutputStream oov = new ObjectOutputStream(ariOut);
+
+            vertices.forEach((v)->{
+                try {
+                    oos.writeObject(v);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            });
+
+            verOut.close();
+            oos.close();
+
+            aristas.forEach((v)->{
+                try {
+                    oov.writeObject(v);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            });
+
+            ariOut.close();
+            oov.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        JOptionPane.showMessageDialog(null, "Guardado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void cargar(PanelGrafos p, File f){
+        p.eliminarTodo();
+        p.repaint();
+
+        try {
+            FileInputStream ari = new FileInputStream(f+"/aristas.bin");
+            FileInputStream ver = new FileInputStream(f+"/vertices.bin");
+
+            ObjectInputStream objetos = new ObjectInputStream(ver);
+
+            while(true){
+                try {
+                    Vertice a = (Vertice) objetos.readObject();
+                    System.out.println("VId:"+a.getId()+" Ptr:"+a);
+                    añadirVertice(a);
+                    p.añadirDibujableExistente((Dibujable)a);
+                }catch (EOFException e){
+                    objetos.close();
+                    ver.close();
+                    break;
+                }
+            }
+
+            objetos = new ObjectInputStream(ari);
+
+            while(true){
+                try {
+                    Arista a = (Arista) objetos.readObject();
+                    System.out.println("Inicio:"+a.getInicio().getId()+" Fin:"+a.getFin().getId());
+                    System.out.println("PtrI:"+a.getInicio()+" PtrF:"+a.getFin());
+                    añadirArista(a);
+                    p.añadirDibujableExistente((Dibujable)a);
+                }catch (EOFException e){
+                    objetos.close();
+                    ari.close();
+                    break;
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        p.repaint();
+        revalidarReferencias();
+
+        JOptionPane.showMessageDialog(null, "Cargado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private Vertice verticePorUID(UUID id){
+        for (Vertice vertice : vertices) {
+            if (vertice.getId().equals(id)) {
+                return vertice;
+            }
+        }
+
+        return null;
+    }
+
+    private void revalidarReferencias(){
+        aristas.forEach((a)->{
+            UUID inicio = a.getInicio().getId();
+            UUID fin = a.getFin().getId();
+
+            a.setInicio( verticePorUID(inicio) );
+            a.setFin( verticePorUID(fin)) ;
+        });
     }
 }

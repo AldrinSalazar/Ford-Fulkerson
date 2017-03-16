@@ -63,6 +63,10 @@ public class PanelGrafos extends JPanel
         this.estado = e;
     }
 
+    public void añadirDibujableExistente(Dibujable d){
+        elementos.add(d);
+    }
+
     public void añadirDibujable(Dibujable... d){
         Arrays.asList(d).forEach(this::añadirDibujable);
     }
@@ -92,6 +96,10 @@ public class PanelGrafos extends JPanel
             estado = Estado.MOVIENDO;
             setCursor(new Cursor(Cursor.MOVE_CURSOR));
         }
+    }
+
+    public void eliminarTodo(){
+        elementos.clear();
     }
 
     @Override
